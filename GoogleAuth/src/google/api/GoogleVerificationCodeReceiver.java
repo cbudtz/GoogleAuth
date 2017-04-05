@@ -46,7 +46,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 public final class GoogleVerificationCodeReceiver implements VerificationCodeReceiver {
 
-  private static final String CALLBACK_PATH = "/Callback";
+  private static final String ServerHost = "localhost";
+
+private static final String CALLBACK_PATH = "/Callback";
+
+private static final int ServerPort = 5050;
 
   /** Server or {@code null} before {@link #getRedirectUri()}. */
   private Server server;
@@ -77,7 +81,7 @@ public final class GoogleVerificationCodeReceiver implements VerificationCodeRec
    * </p>
    */
   public GoogleVerificationCodeReceiver() {
-    this("localhost", -1);
+    this(ServerHost, -1);
   }
 
   /**
@@ -97,9 +101,9 @@ public final class GoogleVerificationCodeReceiver implements VerificationCodeRec
     if (port == -1) {
       port = getUnusedPort();
     }
-    server = new Server(port);
+    server = new Server(ServerPort);
     for (Connector c : server.getConnectors()) {
-      c.setHost("localhost");
+      c.setHost(ServerHost);
     }
     server.addHandler(new CallbackHandler());
     try {
@@ -175,7 +179,7 @@ public final class GoogleVerificationCodeReceiver implements VerificationCodeRec
   public static final class Builder {
 
     /** Host name to use. */
-    private String host = "localhost";
+    private String host = ServerHost;
 
     /** Port to use or {@code -1} to select an unused port. */
     private int port = -1;

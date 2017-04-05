@@ -18,8 +18,9 @@ public class GoogleAuth implements RedirectUrlListener {
 	CountDownLatch latch = new CountDownLatch(1);
 	RedirectUrlListener self = this;
 	private String url ="/";
-//	private String callbackUrl = "localhost";
-	private String callbackUrl = "ec2-34-250-23-172.eu-west-1.compute.amazonaws.com";
+	private String callbackUrl = "localhost";
+//	private String callbackUrl = "ec2-34-250-23-172.eu-west-1.compute.amazonaws.com";
+	private int callbackPort = 5151;
 	  
 	@GET
 	public Response getAuthLink(){
@@ -42,7 +43,7 @@ public class GoogleAuth implements RedirectUrlListener {
 			public void run() {
 				try {
 					System.out.println("invoking sheetsAuthorizer");
-					SheetsAuthorizer.getSheetsService(self, callbackUrl);
+					SheetsAuthorizer.getSheetsService(self, callbackUrl, callbackPort);
 					
 				} catch (IOException e) {
 					

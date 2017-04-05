@@ -65,10 +65,11 @@ public class SheetsAuthorizer {
 	/**
 	 * Creates an authorized Credential object.
 	 * @param host 
+	 * @param port 
 	 * @return an authorized Credential object.
 	 * @throws IOException
 	 */
-	public static Credential authorize(RedirectUrlListener listener, String host) throws IOException {
+	public static Credential authorize(RedirectUrlListener listener, String host, int port) throws IOException {
 		// Load client secrets.
 		System.out.println(JSON_FACTORY);
 		InputStream in =
@@ -84,7 +85,7 @@ public class SheetsAuthorizer {
 				.setDataStoreFactory(DATA_STORE_FACTORY)
 				.setAccessType("offline")
 				.build();
-		VerificationCodeReceiver receiver = new GoogleVerificationCodeReceiver(host, 5151);
+		VerificationCodeReceiver receiver = new GoogleVerificationCodeReceiver(host, port);
 		
 		GoogleAuthApp authApp = new GoogleAuthApp(
 				flow, receiver);
@@ -98,13 +99,14 @@ public class SheetsAuthorizer {
 	/**
 	 * Build and return an authorized Sheets API client service.
 	 * @param host 
+	 * @param port 
 	 * @return an authorized Sheets API client service
 	 * @throws IOException
 	 */
-	public static Sheets getSheetsService(RedirectUrlListener listener, String host) throws IOException {
+	public static Sheets getSheetsService(RedirectUrlListener listener, String host, int port) throws IOException {
 //		GoogleCredential credential = GoogleCredential.fromStream(new FileInputStream("client_secret.json"))
 //			    .createScoped(Collections.singleton(SheetsScopes.SPREADSHEETS_READONLY));
-		Credential credential = authorize(listener, host);
+		Credential credential = authorize(listener, host, port);
 		return new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME)
 				.build();
@@ -114,7 +116,7 @@ public class SheetsAuthorizer {
 		// Build a new authorized API client service.
 		
 		String host = "localhost";
-		Sheets service = getSheetsService(null,host );
+		Sheets service = getSheetsService(null,host, 5151 );
 		// Prints the names and majors of students in a sample spreadsheet:
 		// https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
 		getTestSheet(service);
